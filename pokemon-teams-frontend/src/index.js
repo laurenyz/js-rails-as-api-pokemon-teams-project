@@ -26,16 +26,42 @@ function renderTrainer(trainer) {
     card.dataset.id = `${trainer.id}`
     name.innerText = trainer.name
     addBtn.innerText = "Add Pokemon"
-    addBtn.dataset.id = `${trainer.id}`
+    addBtn.dataset.trainerId = `${trainer.id}`
+    addBtn.addEventListener("click", addPokemon)
     pokemonArray.forEach(pokemon => renderPokemon(pokemon, pokemonList))
 
-    card.append(name, pokemonList, addBtn)
+    card.append(name, addBtn, pokemonList)
     main.append(card)
 
 }
 
 function renderPokemon(pokemon, pokemonList) {
     let pokemonLi = document.createElement('li')
-    pokemonLi.innerText = pokemon.species
-    pokemonList.append(pokemonLi)
+    let releaseBtn = document.createElement('button')
+    
+    pokemonLi.innerText = `${pokemon.nickname} (${pokemon.species})`
+    releaseBtn.innerText = "Release"
+    releaseBtn.classList.add("release")
+    releaseBtn.dataset.pokemonId = pokemon.id
+
+    pokemonLi.append(releaseBtn)
+    
+    if (pokemonList.children.length < 6) {
+        pokemonList.append(pokemonLi)
+    } else {
+        alert("Your team is full")
+    }
+    
+}
+function addPokemon(event) {
+    let card = event.target.parentElement
+    let pokemonList = card.querySelector('ul')
+    payload = {"trainer_id": event.target.dataset.trainerId}
+    fetch(POKEMONS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+    }).then(resp => resp.json()).then(
+        newPokemon => renderPokemon(newPokemon, pokemonList)
+    )
 }
