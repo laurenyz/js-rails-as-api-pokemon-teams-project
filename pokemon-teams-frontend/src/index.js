@@ -43,6 +43,7 @@ function renderPokemon(pokemon, pokemonList) {
     releaseBtn.innerText = "Release"
     releaseBtn.classList.add("release")
     releaseBtn.dataset.pokemonId = pokemon.id
+    releaseBtn.addEventListener("click", deletePokemon)
 
     pokemonLi.append(releaseBtn)
     
@@ -64,4 +65,17 @@ function addPokemon(event) {
     }).then(resp => resp.json()).then(
         newPokemon => renderPokemon(newPokemon, pokemonList)
     )
+}
+
+function deletePokemon(event) {
+    let pokemonId = event.target.dataset.pokemonId
+    let pokemonLi = event.target.parentElement
+
+    fetch(`${POKEMONS_URL}/${pokemonId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json'}
+    })
+
+    pokemonLi.remove()
+
 }
