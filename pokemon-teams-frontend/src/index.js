@@ -3,5 +3,10 @@ const TRAINERS_URL = `${BASE_URL}/trainers`
 const POKEMONS_URL = `${BASE_URL}/pokemons`
 
 document.addEventListener("DOMLoadedContent", () => {
-    
+    getTrainers()
+    // renderTrainers()
 })
+
+function getTrainers() {
+    
+}
